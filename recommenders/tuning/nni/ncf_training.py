@@ -166,7 +166,7 @@ if __name__ == "__main__":
         if "STEPS" in tuner_params:
             steps_param = tuner_params["STEPS"]
             params["n_epochs"] = int(np.rint(steps_param))
-        params.update(tuner_params)
+        params |= tuner_params
         main(params)
     except Exception as exception:
         logger.exception(exception)

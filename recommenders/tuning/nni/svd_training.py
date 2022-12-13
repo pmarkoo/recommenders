@@ -155,8 +155,7 @@ def get_params():
     parser.add_argument("--reg_pu", type=float, dest="reg_pu", default=None)
     parser.add_argument("--reg_qi", type=float, dest="reg_qi", default=None)
 
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
 
 
 def main(params):
@@ -178,7 +177,7 @@ if __name__ == "__main__":
         if "STEPS" in tuner_params:
             steps_param = tuner_params["STEPS"]
             params["n_epochs"] = int(np.rint(steps_param))
-        params.update(tuner_params)
+        params |= tuner_params
         main(params)
     except Exception as exception:
         logger.exception(exception)

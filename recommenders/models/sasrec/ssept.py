@@ -35,7 +35,7 @@ class SSEPT(SASREC):
         """
         super().__init__(**kwargs)
 
-        self.user_num = kwargs.get("user_num", None)  # New
+        self.user_num = kwargs.get("user_num")
         self.conv_dims = kwargs.get("conv_dims", [200, 200])  # modified
         self.user_embedding_dim = kwargs.get(
             "user_embedding_dim", self.embedding_dim

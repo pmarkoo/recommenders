@@ -41,9 +41,7 @@ class NumEncoder(object):
         logging.basicConfig(level=logging.INFO, format="%(asctime)s [INFO] %(message)s")
         self.label_name = label_col
         self.cate_cols = cate_cols
-        self.dtype_dict = {}
-        for item in cate_cols:
-            self.dtype_dict[item] = "str"
+        self.dtype_dict = {item: "str" for item in cate_cols}
         for item in nume_cols:
             self.dtype_dict[item] = "float"
         self.nume_cols = nume_cols
@@ -114,10 +112,10 @@ class NumEncoder(object):
                     feat_encoding["count"].append(0)
                 self.save_cate_avgs[item][cur_feat][0] += labels[idx]
                 self.save_cate_avgs[item][cur_feat][1] += 1
-            df[item + "_t_mean"] = feat_encoding["mean"]
-            df[item + "_t_count"] = feat_encoding["count"]
-            self.tgt_nume_cols.append(item + "_t_mean")
-            self.tgt_nume_cols.append(item + "_t_count")
+            df[f"{item}_t_mean"] = feat_encoding["mean"]
+            df[f"{item}_t_count"] = feat_encoding["count"]
+            self.tgt_nume_cols.append(f"{item}_t_mean")
+            self.tgt_nume_cols.append(f"{item}_t_count")
 
         logging.info("Start manual binary encoding")
         rows = None
@@ -176,10 +174,10 @@ class NumEncoder(object):
         # dynamic_targeting_encoding
         for item in tqdm(self.cate_cols):
             avgs = self.save_cate_avgs[item]
-            df[item + "_t_mean"] = df[item].map(
+            df[f"{item}_t_mean"] = df[item].map(
                 lambda x: avgs[x][0] / avgs[x][1] if x in avgs else 0
             )
-            df[item + "_t_count"] = df[item].map(
+            df[f"{item}_t_count"] = df[item].map(
                 lambda x: avgs[x][1] / self.samples if x in avgs else 0
             )
 
