@@ -47,10 +47,4 @@ def generate_param_grid(params):
     items = sorted(param_new.items())
     keys, values = zip(*items)
 
-    params_exp = []
-    for v in product(*values):
-        param_exp = dict(zip(keys, v))
-        param_exp.update(param_fixed)
-        params_exp.append(param_exp)
-
-    return params_exp
+    return [dict(zip(keys, v)) | param_fixed for v in product(*values)]

@@ -36,10 +36,10 @@ class TfidfRecommender:
 
         # Initialize other variables used in this class
         self.tf = TfidfVectorizer()
-        self.tfidf_matrix = dict()
-        self.tokens = dict()
+        self.tfidf_matrix = {}
+        self.tokens = {}
         self.stop_words = frozenset()
-        self.recommendations = dict()
+        self.recommendations = {}
         self.top_k_recommendations = pd.DataFrame()
 
     def __clean_text(self, text, for_BERT=False, verbose=False):
@@ -102,11 +102,7 @@ class TfidfRecommender:
         df[new_col_name] = df[cols_to_clean].apply(lambda cols: " ".join(cols), axis=1)
 
         # Check if for BERT tokenization
-        if self.tokenization_method in ["bert", "scibert"]:
-            for_BERT = True
-        else:
-            for_BERT = False
-
+        for_BERT = self.tokenization_method in ["bert", "scibert"]
         # Clean the text in the dataframe
         df[new_col_name] = df[new_col_name].map(
             lambda x: self.__clean_text(x, for_BERT)
@@ -154,7 +150,7 @@ class TfidfRecommender:
 
             # Loop through each item
             vectors_tokenized = vectors.copy()
-            for i in range(0, len(vectors)):
+            for i in range(len(vectors)):
                 vectors_tokenized[i] = " ".join(tokenizer.tokenize(vectors[i]))
 
         elif self.tokenization_method == "nltk":
@@ -248,7 +244,7 @@ class TfidfRecommender:
         len_df_clean = len(df_clean)
 
         results = {}
-        for idx, row in zip(range(0, len_df_clean), data):
+        for idx, row in zip(range(len_df_clean), data):
             similar_indices = sorted_idx[idx][: -(len_df_clean + 1) : -1]
             similar_items = [(cosine_sim[idx][i], data[i]) for i in similar_indices]
             results[row] = similar_items[1:]
@@ -264,10 +260,10 @@ class TfidfRecommender:
             k (int): Number of recommendations to return.
         """
         # Initialize new dataframe to hold recommendation output
-        item_id = list()
-        rec_rank = list()
-        rec_score = list()
-        rec_item_id = list()
+        item_id = []
+        rec_rank = []
+        rec_score = []
+        rec_item_id = []
 
         # For each item
         for _item_id in self.recommendations:
@@ -326,10 +322,7 @@ class TfidfRecommender:
             pandas.Series: Single row from dataframe containing recommended item info.
         """
 
-        # Return row
-        rec_info = metadata.iloc[int(np.where(metadata[self.id_col] == rec_id)[0])]
-
-        return rec_info
+        return metadata.iloc[int(np.where(metadata[self.id_col] == rec_id)[0])]
 
     def __make_clickable(self, address):
         """Make URL clickable.

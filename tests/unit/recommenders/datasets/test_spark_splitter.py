@@ -208,4 +208,4 @@ def _if_later(data1, data2):
         (F.col("max") <= F.col("min"))
     )
 
-    return all([x[0] for x in all_times.collect()])
+    return all(x[0] for x in all_times.collect())

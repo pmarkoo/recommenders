@@ -109,7 +109,7 @@ def test_sampling_funct(init_rbm, affinity_matrix):
         """
         a = []
 
-        for i in range(0, s + 1):
+        for i in range(s + 1):
             l_bool = sampled == i
             a.append(l_bool)
 

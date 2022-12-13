@@ -97,9 +97,8 @@ def _do_stratification_spark(
     if col_item not in data.columns:
         raise ValueError("Schema of data not valid. Missing Item Col")
 
-    if not is_random:
-        if col_timestamp not in data.columns:
-            raise ValueError("Schema of data not valid. Missing Timestamp Col")
+    if not is_random and col_timestamp not in data.columns:
+        raise ValueError("Schema of data not valid. Missing Timestamp Col")
 
     if min_rating > 1:
         data = min_rating_filter_spark(

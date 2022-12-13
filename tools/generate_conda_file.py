@@ -129,7 +129,7 @@ if __name__ == "__main__":
         args.pyspark = True
         pyspark_version_info = args.pyspark_version.split(".")
         if len(pyspark_version_info) != 3 or any(
-            [not x.isdigit() for x in pyspark_version_info]
+            not x.isdigit() for x in pyspark_version_info
         ):
             raise TypeError(
                 "PySpark version input must be valid numeric format (e.g. --pyspark-version=2.3.1)"
@@ -154,38 +154,38 @@ if __name__ == "__main__":
     conda_packages = CONDA_BASE
     pip_packages = PIP_BASE
     if args.pyspark:
-        conda_packages.update(CONDA_PYSPARK)
-        conda_packages["pyspark"] = "pyspark=={}".format(args.pyspark_version)
-        pip_packages.update(PIP_PYSPARK)
+        conda_packages |= CONDA_PYSPARK
+        conda_packages["pyspark"] = f"pyspark=={args.pyspark_version}"
+        pip_packages |= PIP_PYSPARK
     if args.gpu:
-        conda_packages.update(CONDA_GPU)
-        pip_packages.update(PIP_GPU)
+        conda_packages |= CONDA_GPU
+        pip_packages |= PIP_GPU
 
     # check for os platform support
     if platform == "darwin":
-        pip_packages.update(PIP_DARWIN)
+        pip_packages |= PIP_DARWIN
     elif platform.startswith("linux"):
-        pip_packages.update(PIP_LINUX)
+        pip_packages |= PIP_LINUX
     elif platform == "win32":
-        pip_packages.update(PIP_WIN32)
+        pip_packages |= PIP_WIN32
     else:
         raise Exception("Unsupported platform, must be Windows, Linux, or macOS")
 
     # write out yaml file
-    conda_file = "{}.yaml".format(conda_env)
+    conda_file = f"{conda_env}.yaml"
     with open(conda_file, "w") as f:
         for line in HELP_MSG.format(conda_env=conda_env).split("\n"):
-            f.write("# {}\n".format(line))
-        f.write("name: {}\n".format(conda_env))
+            f.write(f"# {line}\n")
+        f.write(f"name: {conda_env}\n")
         f.write("channels:\n")
         for channel in CHANNELS:
-            f.write("- {}\n".format(channel))
+            f.write(f"- {channel}\n")
         f.write("dependencies:\n")
         for conda_package in conda_packages.values():
-            f.write("- {}\n".format(conda_package))
+            f.write(f"- {conda_package}\n")
         f.write("- pip:\n")
         for pip_package in pip_packages.values():
-            f.write("  - {}\n".format(pip_package))
+            f.write(f"  - {pip_package}\n")
 
-    print("Generated conda file: {}".format(conda_file))
+    print(f"Generated conda file: {conda_file}")
     print(HELP_MSG.format(conda_env=conda_env))

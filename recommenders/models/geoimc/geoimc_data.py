@@ -41,9 +41,7 @@ class DataPtr:
         Returns:
             csr_matrix: Target matrix (based on the data_indices filter)
         """
-        if self.data_indices is None:
-            return self.data
-        return self.data[self.data_indices]
+        return self.data if self.data_indices is None else self.data[self.data_indices]
 
     def get_entity(self, of="row"):
         """Get entity
@@ -108,8 +106,11 @@ class Dataset:
         self.training_data = DataPtr(data, self.entities)
         self.test_data = DataPtr(data, self.entities)
 
-        self.training_data.data_indices, self.test_data.data_indices = train_test_split(
-            np.array(range(0, data.shape[0])),
+        (
+            self.training_data.data_indices,
+            self.test_data.data_indices,
+        ) = train_test_split(
+            np.array(range(data.shape[0])),
             test_size=test_ratio,
             shuffle=True,
             random_state=0,
@@ -144,7 +145,7 @@ class ML_100K(Dataset):
         data = []
         row = list(df["user id"] - 1)
         col = list(df["item id"] - 1)
-        for idx in range(0, len(df)):
+        for idx in range(len(df)):
             val = df["rating"].iloc[idx]
             data += [val]
 
@@ -218,8 +219,7 @@ class ML_100K(Dataset):
             axis=1,
         )
         features_df.drop(["user_id"], axis=1, inplace=True)
-        user_features = np.nan_to_num(features_df.to_numpy())
-        return user_features
+        return np.nan_to_num(features_df.to_numpy())
 
     def _load_item_features(self, path):
         """Load item features
@@ -266,5 +266,4 @@ class ML_100K(Dataset):
             ],
             axis=1,
         )
-        item_features = np.nan_to_num(features_df.to_numpy())
-        return item_features
+        return np.nan_to_num(features_df.to_numpy())

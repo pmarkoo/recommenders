@@ -45,9 +45,15 @@ TOL = 0.1
 def rating_true():
     return pd.DataFrame(
         {
-            DEFAULT_USER_COL: np.random.choice(range(0, DATA_USER_NUM), DATA_SAMPLE_NUM),
-            DEFAULT_ITEM_COL: np.random.choice(range(0, DATA_ITEM_NUM), DATA_SAMPLE_NUM),
-            DEFAULT_RATING_COL: np.random.choice(range(1, DATA_RATING_MAX+1), DATA_SAMPLE_NUM)
+            DEFAULT_USER_COL: np.random.choice(
+                range(DATA_USER_NUM), DATA_SAMPLE_NUM
+            ),
+            DEFAULT_ITEM_COL: np.random.choice(
+                range(DATA_ITEM_NUM), DATA_SAMPLE_NUM
+            ),
+            DEFAULT_RATING_COL: np.random.choice(
+                range(1, DATA_RATING_MAX + 1), DATA_SAMPLE_NUM
+            ),
         }
     )
 
@@ -56,9 +62,15 @@ def rating_true():
 def rating_pred():
     return pd.DataFrame(
         {
-            DEFAULT_USER_COL: np.random.choice(range(0, DATA_USER_NUM), DATA_SAMPLE_NUM),
-            DEFAULT_ITEM_COL: np.random.choice(range(0, DATA_ITEM_NUM), DATA_SAMPLE_NUM),
-            DEFAULT_PREDICTION_COL: np.random.choice(range(1, DATA_RATING_MAX+1), DATA_SAMPLE_NUM)
+            DEFAULT_USER_COL: np.random.choice(
+                range(DATA_USER_NUM), DATA_SAMPLE_NUM
+            ),
+            DEFAULT_ITEM_COL: np.random.choice(
+                range(DATA_ITEM_NUM), DATA_SAMPLE_NUM
+            ),
+            DEFAULT_PREDICTION_COL: np.random.choice(
+                range(1, DATA_RATING_MAX + 1), DATA_SAMPLE_NUM
+            ),
         }
     )
 # fmt: on
